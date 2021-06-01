@@ -18,7 +18,15 @@ const Test: React.FC<Props> = () => {
 
   return (
     <div className="App">
-      <div className="banner">测试</div>
+      <div className="banner">
+        测试
+        <Button
+          shape={"circle"}
+          onClick={() => history.push("/menu/music/lovepome")}
+        >
+          GO
+        </Button>
+      </div>
       <div className="stepButton">
         <Button size={"large"} onClick={Restart} type="primary">
           {"RESTART"}
@@ -28,12 +36,6 @@ const Test: React.FC<Props> = () => {
         </Button>
         <Button size={"large"} onClick={Next} type="primary">
           {"NEXT"}
-        </Button>
-        <Button
-          shape={"circle"}
-          onClick={() => history.push("/menu/music/lovepome")}
-        >
-          go
         </Button>
       </div>
       <Paragraph

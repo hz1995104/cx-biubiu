@@ -1,8 +1,10 @@
+import { SoundOutlined, ReadOutlined } from "@ant-design/icons";
+
 export default [
   {
     name: "书籍",
     path: "/menu/book",
-    icon: "menu",
+    icon: <ReadOutlined />,
     children: [
       {
         name: "活着",
@@ -17,14 +19,14 @@ export default [
   {
     name: "音乐",
     path: "/menu/music",
-    icon: "dashboard",
+    icon: <SoundOutlined />,
     children: [
       {
         name: "意外",
         path: "/menu/music/accident",
       },
       {
-        name: "爱诗",
+        name: "爱的诗",
         path: "/menu/music/lovepome",
       },
     ],

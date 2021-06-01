@@ -1,6 +1,8 @@
 import { lazy } from "react";
 import { RouteConfig } from "react-router-config";
 
+
+
 export const routes: RouteConfig[] = [
   {
     path: "/",
@@ -16,6 +18,12 @@ export const routes: RouteConfig[] = [
             exact: true,
             component: lazy(() => import("../page/test/index")),
           },
+          {
+            path: "/*",
+            name: "404",
+            exact: true,
+            component: lazy(() => import("../page/not-found/index")),
+          }
         ],
       },
       {
@@ -27,7 +35,6 @@ export const routes: RouteConfig[] = [
             exact: true,
             navigate: false,
             name: "书籍",
-            components: null,
           },
           {
             path: "/menu/book/live",
@@ -46,7 +53,6 @@ export const routes: RouteConfig[] = [
             name: "音乐",
             navigate: false,
             exact: true,
-            components: null,
           },
           {
             path: "/menu/music/accident",
@@ -56,12 +62,24 @@ export const routes: RouteConfig[] = [
           },
           {
             path: "/menu/music/lovepome",
-            name: "爱诗",
+            name: "爱的诗",
             exact: true,
             component: lazy(() => import("../page/love-poem/index")),
           },
+          {
+            path: "/*",
+            name: "404",
+            exact: true,
+            component: lazy(() => import("../page/not-found/index")),
+          }
         ],
       },
+      {
+        path: "/*",
+        name: "404",
+        exact: true,
+        component: lazy(() => import("../page/not-found/index")),
+      }
     ],
   },
 ];

@@ -1,30 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Layout, Menu } from "antd";
-import { RouteConfigComponentProps, RouteConfig } from "react-router-config";
+import { RouteConfigComponentProps } from "react-router-config";
 import "./index.less";
-import {
-  MailOutlined,
-} from "@ant-design/icons";
 
 export interface SilderProps extends RouteConfigComponentProps {
   collapsed: boolean;
   menuData: any;
-  onCollapse?: () => void;
 }
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 const SilderMenu: React.FC<SilderProps> = (props) => {
-  const [openKey, setopenKey] = useState<string[]>();
+  const [openKey, setopenKey] = useState<string[]>([]);
+  const [dom, setdom] = useState();
+
   const {
     collapsed,
     menuData,
-    onCollapse = () => {},
     route,
     location: { pathname },
   } = props;
+
+  useEffect(() => {
+    setopenKey(getSelectedMenuKeys(pathname));
+  }, [pathname]);
+
+  useEffect(() => {
+    setdom(getNavMenuItems(menuData));
+  }, []);
 
   const urlToList = (url: string) => {
     const urllist = url.split("/").filter((i) => i);
@@ -36,11 +41,10 @@ const SilderMenu: React.FC<SilderProps> = (props) => {
   const getSelectedMenuKeys = (pathname: string) => {
     let pathSnippets = urlToList(pathname);
 
-    let res: string[]= [];
+    let res: string[] = [];
     pathSnippets.map((_url: string) => {
       const url = _url;
-
-      let arr:any = route?.routes?.filter((item) => item.path == url);
+      let arr: any = route?.routes?.filter((item) => item.path == url);
       if (!arr?.length) {
         return null;
       }
@@ -50,7 +54,7 @@ const SilderMenu: React.FC<SilderProps> = (props) => {
   };
 
   // 获得菜单节点
-  const getNavMenuItems = (menusData: any) => {
+  const getNavMenuItems = useCallback((menusData: any) => {
     if (!menusData) {
       return [];
     }
@@ -58,7 +62,8 @@ const SilderMenu: React.FC<SilderProps> = (props) => {
       const ItemDom = getSubMenuOrItem(item);
       return ItemDom;
     });
-  };
+  }, []);
+
   // 获取子菜单
   const getSubMenuOrItem = (item: any) => {
     if (item.children && item.children.some((child: any) => child.name)) {
@@ -67,16 +72,8 @@ const SilderMenu: React.FC<SilderProps> = (props) => {
         return (
           <SubMenu
             key={item.path}
-            icon={<MailOutlined />}
-            title={
-              item.icon ? (
-                <span>
-                  <span>{item.name}</span>
-                </span>
-              ) : (
-                item.name
-              )
-            }
+            icon={item.icon ? item.icon : null}
+            title={item.name}
           >
             {childrenItems}
           </SubMenu>
@@ -90,61 +87,54 @@ const SilderMenu: React.FC<SilderProps> = (props) => {
 
   // 获得菜单路径
   const getMenuItemPath = (item: any) => {
-    const itemPath = item.path;
-    if (!itemPath) {
-      return item.name;
-    }
-
-    const { target, name, icon } = item;
-    // Is it a http link
-    if (/^https?:\/\//.test(itemPath)) {
-      return (
-        <a href={itemPath} target={target}>
-          <span>{name}</span>
-        </a>
-      );
-    }
-
+    const { path, name } = item;
     return (
-      <Link target={target} to={itemPath}>
-        <span>{collapsed && icon === "home" ? null : name}</span>
+      <Link to={path}>
+        <span>{name}</span>
       </Link>
     );
   };
 
   const handleOpenChange = (openKeys: any) => {
     const lastOpenKey: any = [openKeys[openKeys.length - 1]];
-
     setopenKey(lastOpenKey);
   };
 
-  let selectedKeys: any = getSelectedMenuKeys(pathname);
+  let open_key = getSelectedMenuKeys(pathname);
 
-  useEffect(() => {
-    setopenKey(getSelectedMenuKeys(pathname));
-  }, [pathname]);
+  let selectedKeys = getSelectedMenuKeys(pathname);
+
+  if (!selectedKeys.length) {
+    selectedKeys = [openKey[openKey.length - 1]];
+  }
+
+  const menuProps = collapsed
+      ? {}
+      : {
+        openKeys:openKey[0] ? openKey : open_key,
+      };
+
 
   return (
     <Sider
+      key={"sider"}
       collapsed={collapsed}
       collapsible
-      onCollapse={onCollapse}
       breakpoint="lg"
       className="component-slide-menu"
     >
       <div className={"logo"} key="logo">
-        {collapsed ? "" : "CX"}
+        {collapsed ? "cx" : "CX"}
       </div>
       <Menu
         key="Menu"
         mode="inline"
-        openKeys={openKey}
+        {...menuProps }
         onOpenChange={handleOpenChange}
         selectedKeys={selectedKeys}
-        style={{ padding: "0", width: "100%" }}
         theme={"dark"}
       >
-        {getNavMenuItems(menuData)}
+        {dom}
       </Menu>
     </Sider>
   );

@@ -1,14 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from "react";
 
+export interface LovePoemProps {}
 
-export interface LovePoemProps {
-    
-}
- 
 const LovePoem: React.FC<LovePoemProps> = () => {
-    return ( 
-        <div>爱诗</div>
-     );
-}
- 
+  return (
+    <div
+      style={{
+        fontSize: 40,
+        color: "#00E5EE",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignContent: "center",
+        fontWeight: 700,
+      }}
+    >
+      爱的诗
+    </div>
+  );
+};
+
 export default LovePoem;

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React from "react";
 import { renderRoutes, RouteConfigComponentProps } from "react-router-config";
-import { useHistory } from "react-router-dom";
+import { Switch, useHistory } from "react-router-dom";
 
 interface Props extends RouteConfigComponentProps {}
 
@@ -11,7 +11,7 @@ const BaseLayout: React.FC<Props> = (props) => {
   if (location.pathname === "/") {
     history.push("/home/test");
   }
-  return <Fragment>{renderRoutes(route?.routes)}</Fragment>;
+  return <Switch>{renderRoutes(route?.routes)}</Switch>;
 };
 
 export default BaseLayout;
