@@ -105,31 +105,6 @@ function myInstanceof(left: any, right: any) {
 }
 
 
-/**
- * class
- * **/
-const myClass = (function() {
-  function Constructor() {
-  }
-
-  //添加原型方法
-  Constructor.prototype.getName = function name() {
-    console.log('原型方法getName:');
-  };
-  //添加原型属性
-  Constructor.prototype.age = '原型属性age';
-  //添加静态方法
-  //@ts-ignore
-  Constructor.log = function log() {
-    console.log('我是构造器的静态方法log');
-  };
-  //添加静态属性
-  //@ts-ignore
-  Constructor.isWho = '构造器静态属性isWho';
-  return Constructor;
-})();
-
-
 
 
 /**
@@ -490,31 +465,6 @@ function createIterator(items: any) {
 }
 
 
-/**
- * 异步加载组件（懒加载）原理实现HOC
- * **/
-export default function AsyncRouter(loadRouter:any) {
-  return class Content extends React.Component {
-    state = {Component: null}
-    componentDidMount() {
-      if (this.state.Component) return
-      loadRouter()
-      //@ts-ignore
-        .then(module => module.default)
-        //@ts-ignore
-        .then(Component => this.setState({Component},
-         ))
-    }
-    render() {
-      const {Component} = this.state
-      //@ts-ignore
-      return Component ? <Component {
-      ...this.props
-      }
-      /> : null
-    }
-  }
-}
 
 
 

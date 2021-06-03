@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import { RouteConfig } from "react-router-config";
+import { templateRoutes } from "./template";
 
 
 
@@ -66,6 +67,7 @@ export const routes: RouteConfig[] = [
             exact: true,
             component: lazy(() => import("../page/love-poem/index")),
           },
+          ...templateRoutes,
           {
             path: "/*",
             name: "404",

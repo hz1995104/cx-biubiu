@@ -1,6 +1,6 @@
 import { SoundOutlined, ReadOutlined } from "@ant-design/icons";
 
-export default [
+const menu = [
   {
     name: "书籍",
     path: "/menu/book",
@@ -31,4 +31,17 @@ export default [
       },
     ],
   },
+  {
+    name: "模版",
+    path: "/menu/template",
+    icon: <SoundOutlined />,
+    children: [
+      {
+        name: "基础表格",
+        path: "/menu/template/baseTable",
+      },
+    ],
+  },
 ];
+
+export default menu;

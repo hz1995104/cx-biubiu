@@ -1,4 +1,10 @@
-import React, { useState, useEffect, Fragment, Suspense } from "react";
+import React, {
+  useState,
+  useEffect,
+  Fragment,
+  Suspense,
+  useCallback,
+} from "react";
 import { renderRoutes, RouteConfigComponentProps } from "react-router-config";
 import { Layout, Breadcrumb, BackTop } from "antd";
 import { Link } from "react-router-dom";
@@ -25,7 +31,7 @@ const MenuLayout: React.FC<Props> = (props) => {
     setcollapsed(collapsed);
   };
 
-  const getPath = () => {
+  const getPath = useCallback(() => {
     let pathSnippets: string[] = history.location.pathname
       .split("/")
       .filter((i) => i);
@@ -33,7 +39,7 @@ const MenuLayout: React.FC<Props> = (props) => {
     let extraBreadcrumbItems = pathSnippets.map((_: any, index: any) => {
       const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
 
-      let arr = route?.routes?.filter((item) => item.path == url);
+      let arr = route?.routes?.filter((item) => item.path === url);
       if (!arr?.length) {
         return null;
       }
@@ -48,11 +54,11 @@ const MenuLayout: React.FC<Props> = (props) => {
       );
     }) as any;
     setextraBreadcrumbItems(extraBreadcrumbItems);
-  };
+  }, [history.location.pathname,route]);
 
   useEffect(() => {
     getPath();
-  }, [pathname]);
+  }, [pathname, getPath]);
 
   return (
     <Fragment>

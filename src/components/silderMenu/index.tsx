@@ -23,35 +23,30 @@ const SilderMenu: React.FC<SilderProps> = (props) => {
     location: { pathname },
   } = props;
 
-  useEffect(() => {
-    setopenKey(getSelectedMenuKeys(pathname));
-  }, [pathname]);
-
-  useEffect(() => {
-    setdom(getNavMenuItems(menuData));
-  }, []);
-
-  const urlToList = (url: string) => {
+  const urlToList = useCallback((url: string) => {
     const urllist = url.split("/").filter((i) => i);
     return urllist.map((_, index) => {
       return `/${urllist.slice(0, index + 1).join("/")}`;
     });
-  };
+  }, []);
 
-  const getSelectedMenuKeys = (pathname: string) => {
-    let pathSnippets = urlToList(pathname);
+  const getSelectedMenuKeys = useCallback(
+    (pathname: string) => {
+      let pathSnippets = urlToList(pathname);
 
-    let res: string[] = [];
-    pathSnippets.map((_url: string) => {
-      const url = _url;
-      let arr: any = route?.routes?.filter((item) => item.path == url);
-      if (!arr?.length) {
-        return null;
-      }
-      res.push(arr[0]?.path?.toString());
-    });
-    return res;
-  };
+      let res: string[] = [];
+      pathSnippets.forEach((_url: string) => {
+        const url = _url;
+        let arr: any = route?.routes?.filter((item) => item.path === url);
+        if (!arr?.length) {
+          return null;
+        }
+        res.push(arr[0]?.path?.toString());
+      });
+      return res;
+    },
+    [urlToList, route]
+  );
 
   // 获得菜单节点
   const getNavMenuItems = useCallback((menusData: any) => {
@@ -65,25 +60,36 @@ const SilderMenu: React.FC<SilderProps> = (props) => {
   }, []);
 
   // 获取子菜单
-  const getSubMenuOrItem = (item: any) => {
-    if (item.children && item.children.some((child: any) => child.name)) {
-      const childrenItems = getNavMenuItems(item.children);
-      if (childrenItems && childrenItems.length > 0) {
-        return (
-          <SubMenu
-            key={item.path}
-            icon={item.icon ? item.icon : null}
-            title={item.name}
-          >
-            {childrenItems}
-          </SubMenu>
-        );
+  const getSubMenuOrItem = useCallback(
+    (item: any) => {
+      if (item.children && item.children.some((child: any) => child.name)) {
+        const childrenItems = getNavMenuItems(item.children);
+        if (childrenItems && childrenItems.length > 0) {
+          return (
+            <SubMenu
+              key={item.path}
+              icon={item.icon ? item.icon : null}
+              title={item.name}
+            >
+              {childrenItems}
+            </SubMenu>
+          );
+        }
+        return <Menu.Item key={item.path}>{getMenuItemPath(item)}</Menu.Item>;
+      } else {
+        return <Menu.Item key={item.path}>{getMenuItemPath(item)}</Menu.Item>;
       }
-      return <Menu.Item key={item.path}>{getMenuItemPath(item)}</Menu.Item>;
-    } else {
-      return <Menu.Item key={item.path}>{getMenuItemPath(item)}</Menu.Item>;
-    }
-  };
+    },
+    [getNavMenuItems]
+  );
+
+  useEffect(() => {
+    setopenKey(getSelectedMenuKeys(pathname));
+  }, [pathname, getSelectedMenuKeys]);
+
+  useEffect(() => {
+    setdom(getNavMenuItems(menuData));
+  }, [getNavMenuItems, menuData]);
 
   // 获得菜单路径
   const getMenuItemPath = (item: any) => {
@@ -109,11 +115,10 @@ const SilderMenu: React.FC<SilderProps> = (props) => {
   }
 
   const menuProps = collapsed
-      ? {}
-      : {
-        openKeys:openKey[0] ? openKey : open_key,
+    ? {}
+    : {
+        openKeys: openKey[0] ? openKey : open_key,
       };
-
 
   return (
     <Sider
@@ -129,7 +134,7 @@ const SilderMenu: React.FC<SilderProps> = (props) => {
       <Menu
         key="Menu"
         mode="inline"
-        {...menuProps }
+        {...menuProps}
         onOpenChange={handleOpenChange}
         selectedKeys={selectedKeys}
         theme={"dark"}
