@@ -19,7 +19,7 @@ const Test: React.FC<Props> = () => {
   return (
     <div className="App">
       <div className="banner">
-        测试
+        CX-BIUBIU
         <Button
           shape={"circle"}
           onClick={() => history.push("/menu/music/lovepome")}
