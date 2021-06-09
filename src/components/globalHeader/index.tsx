@@ -11,7 +11,7 @@ export interface GlobalHeaderProps extends RouteConfigComponentProps {
   onCollapse: (collapsed: boolean) => void;
 }
 
-const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
+export const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
   const { user } = useContext(UserContext);
   const { collapsed, onCollapse } = props;
 
@@ -47,5 +47,3 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
     </div>
   );
 };
-
-export default GlobalHeader;

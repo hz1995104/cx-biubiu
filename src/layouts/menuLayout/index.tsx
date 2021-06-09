@@ -8,10 +8,10 @@ import React, {
 import { renderRoutes, RouteConfigComponentProps } from "react-router-config";
 import { Layout, Breadcrumb, BackTop } from "antd";
 import { Link } from "react-router-dom";
-import menuData from "../../config/menu";
-import SilderMenu from "../../components/silderMenu/index";
-import GlobalHeader from "../../components/globalHeader/index";
-import { Loading } from "../../components/loading/index";
+import { menuData } from "@/config/menu";
+import { SilderMenu } from "@/components";
+import { GlobalHeader } from "@/components";
+import { Loading } from "@/components";
 
 interface Props extends RouteConfigComponentProps {}
 
@@ -54,7 +54,7 @@ const MenuLayout: React.FC<Props> = (props) => {
       );
     }) as any;
     setextraBreadcrumbItems(extraBreadcrumbItems);
-  }, [history.location.pathname,route]);
+  }, [history.location.pathname, route]);
 
   useEffect(() => {
     getPath();

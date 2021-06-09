@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import "./index.less";
+import "@/page/test/index.less";
 import { Button, Typography } from "antd";
 import { useHistory } from "react-router-dom";
 
@@ -10,19 +10,21 @@ const { Paragraph } = Typography;
 const Test: React.FC<Props> = () => {
   const history = useHistory();
 
-  const Restart = () => {};
+  const Restart = () => {
 
-  const Next = () => {};
+
+  }
+const Next = () => {};
 
   const Back = () => {};
 
-  return (
+  return ( 
     <div className="App">
       <div className="banner">
         CX-BIUBIU
         <Button
           shape={"circle"}
-          onClick={() => history.push("/menu/music/lovepome")}
+          onClick={() => history.push("/menu/template/baseTable")}
         >
           GO
         </Button>

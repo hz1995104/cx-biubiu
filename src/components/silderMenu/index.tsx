@@ -12,7 +12,7 @@ export interface SilderProps extends RouteConfigComponentProps {
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
-const SilderMenu: React.FC<SilderProps> = (props) => {
+export const SilderMenu: React.FC<SilderProps> = (props) => {
   const [openKey, setopenKey] = useState<string[]>([]);
   const [dom, setdom] = useState();
 
@@ -144,5 +144,3 @@ const SilderMenu: React.FC<SilderProps> = (props) => {
     </Sider>
   );
 };
-
-export default SilderMenu;

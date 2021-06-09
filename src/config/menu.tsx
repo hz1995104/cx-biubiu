@@ -1,6 +1,10 @@
-import { SoundOutlined, ReadOutlined } from "@ant-design/icons";
+import {
+  SoundOutlined,
+  ReadOutlined,
+  HeatMapOutlined,
+} from "@ant-design/icons";
 
-const menu = [
+export const menuData = [
   {
     name: "书籍",
     path: "/menu/book",
@@ -34,7 +38,7 @@ const menu = [
   {
     name: "模版",
     path: "/menu/template",
-    icon: <SoundOutlined />,
+    icon: <HeatMapOutlined />,
     children: [
       {
         name: "基础表格",
@@ -43,5 +47,3 @@ const menu = [
     ],
   },
 ];
-
-export default menu;
