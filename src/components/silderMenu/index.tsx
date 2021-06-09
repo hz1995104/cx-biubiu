@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import { RouteConfigComponentProps } from "react-router-config";
 import "./index.less";
+import "antd/es/menu/style/css"
 
 export interface SilderProps extends RouteConfigComponentProps {
   collapsed: boolean;

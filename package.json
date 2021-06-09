@@ -165,6 +165,7 @@
     ]
   },
   "devDependencies": {
+    "@types/antd": "^1.0.0",
     "@types/react-router-config": "^5.0.2",
     "@types/react-router-dom": "^5.1.7",
     "babel-plugin-import": "^1.13.3"
