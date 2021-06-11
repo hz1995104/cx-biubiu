@@ -1,6 +1,5 @@
 import { Spin } from "antd";
 import { useMemo } from "react";
-import "./index.less";
 
 export function Loading() {
   return useMemo(

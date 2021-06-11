@@ -34,7 +34,6 @@ export const SilderMenu: React.FC<SilderProps> = (props) => {
   const getSelectedMenuKeys = useCallback(
     (pathname: string) => {
       let pathSnippets = urlToList(pathname);
-
       let res: string[] = [];
       pathSnippets.forEach((_url: string) => {
         const url = _url;
@@ -69,7 +68,7 @@ export const SilderMenu: React.FC<SilderProps> = (props) => {
           return (
             <SubMenu
               key={item.path}
-              icon={item.icon ? item.icon : null}
+              icon={item.icon ? React.createElement(item.icon) : null}
               title={item.name}
             >
               {childrenItems}
@@ -130,7 +129,7 @@ export const SilderMenu: React.FC<SilderProps> = (props) => {
       className="component-slide-menu"
     >
       <div className={"logo"} key="logo">
-        {collapsed ? "cx" : "CX"}
+        {collapsed ? "biu" : "BIU"}
       </div>
       <Menu
         key="Menu"

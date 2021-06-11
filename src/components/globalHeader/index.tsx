@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../../stores";
 import "./index.less";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
+import pic_one from '@/static/pic_one.jpg'
 
 export interface GlobalHeaderProps extends RouteConfigComponentProps {
   collapsed: boolean;
@@ -20,7 +21,7 @@ export const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
   };
 
   const menu = (
-    <Menu selectedKeys={[]}>
+    <Menu>
       <Menu.Item key="logout">
         <Link to={"/home/test"}>返回首页</Link>
       </Menu.Item>
@@ -37,8 +38,7 @@ export const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
           <span className={"action account"}>
             <Avatar
               className={"avatar"}
-              size="small"
-              src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png"
+              src={pic_one}
             />
             <span>{user.name}</span>
           </span>

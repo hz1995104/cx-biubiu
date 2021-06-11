@@ -29,7 +29,7 @@ export const App: FunctionComponent = () => {
   const [user, setUser] = useState({});
 
   const handleUser = useCallback(() => {
-    setUser({ name: "cx", authority: "all" });
+    setUser({ name: "陈欣", authority: "all" });
   }, []);
 
   useEffect(() => {

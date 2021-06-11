@@ -8,7 +8,7 @@ export const menuData = [
   {
     name: "书籍",
     path: "/menu/book",
-    icon: <ReadOutlined />,
+    icon: ReadOutlined,
     children: [
       {
         name: "活着",
@@ -23,7 +23,7 @@ export const menuData = [
   {
     name: "音乐",
     path: "/menu/music",
-    icon: <SoundOutlined />,
+    icon: SoundOutlined,
     children: [
       {
         name: "意外",
@@ -38,7 +38,7 @@ export const menuData = [
   {
     name: "模版",
     path: "/menu/template",
-    icon: <HeatMapOutlined />,
+    icon: HeatMapOutlined,
     children: [
       {
         name: "基础表格",

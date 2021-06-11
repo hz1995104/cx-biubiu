@@ -1,27 +1,22 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
 import "@/page/test/index.less";
-import { Button, Typography } from "antd";
+import { Button } from "antd";
 import { useHistory } from "react-router-dom";
 
 export interface Props {}
-const { Paragraph } = Typography;
 
 const Test: React.FC<Props> = () => {
   const history = useHistory();
 
-  const Restart = () => {
-
-
-  }
-const Next = () => {};
+  const Restart = () => {};
+  const Next = () => {};
 
   const Back = () => {};
 
-  return ( 
+  return (
     <div className="App">
       <div className="banner">
-        CX-BIUBIU
+        BIUBIU
         <Button
           shape={"circle"}
           onClick={() => history.push("/menu/template/baseTable")}
@@ -40,9 +35,6 @@ const Next = () => {};
           {"NEXT"}
         </Button>
       </div>
-      <Paragraph
-        ellipsis={{ rows: 1, expandable: true, symbol: "more" }}
-      ></Paragraph>
     </div>
   );
 };

@@ -35,7 +35,6 @@ const MenuLayout: React.FC<Props> = (props) => {
     let pathSnippets: string[] = history.location.pathname
       .split("/")
       .filter((i) => i);
-    //将切分的路径读出来，形成面包屑，存放到this.state.extraBreadcrumbItems
     let extraBreadcrumbItems = pathSnippets.map((_: any, index: any) => {
       const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
 
