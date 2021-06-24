@@ -8,13 +8,13 @@ import {
   Form,
   Input,
   Select,
-  message,
   Modal,
 } from "antd";
 import "./index.less";
 import { ColumnProps } from "antd/lib/table";
 import { TablePaginationConfig } from "antd/lib/table/index";
 import { PlusOutlined } from "@ant-design/icons";
+import { ModalForm } from "./components//modal-form";
 
 interface Pager {
   pageSize: number;
@@ -38,12 +38,18 @@ export interface ListItem {
   type: number;
 }
 
+//modal中表单的属性
+interface FormData {
+  groupName: string;
+}
+
 const BaseTable: React.FC = () => {
   const [data, setData] = useState<ListItem[]>([]);
   const [total, setTotal] = useState(0);
   const [pager, setPager] = useState<Pager>({ pageIndex: 1, pageSize: 20 });
   const [formData, setFormData] = useState<SearchFormData>({});
   const [createVisible, setCreateVisible] = useState(false);
+  const [modelInitData, setModelInitData] = useState<FormData>();
 
   const [form] = Form.useForm();
 
@@ -72,15 +78,15 @@ const BaseTable: React.FC = () => {
   //重置数据
   const reset = () => {
     form.resetFields();
-    setPager({ pageIndex: 1, pageSize: 20 });
     setFormData({});
+    setPager({ pageIndex: 1, pageSize: 20 });
   };
 
   //提交表单
   const submit = () => {
     form.validateFields().then((res) => {
-      setPager({ pageIndex: 1, pageSize: 20 });
       setFormData(res);
+      setPager({ pageIndex: 1, pageSize: 20 });
     });
   };
 
@@ -112,11 +118,13 @@ const BaseTable: React.FC = () => {
   //存在modal
   const addForm = useMemo(
     () => (
-      <Modal
+      <ModalForm
         title="新增"
+        onConfirm={(formData) => setCreateVisible(false)}
+        initData={modelInitData}
         visible={createVisible}
         onCancel={() => setCreateVisible(false)}
-      ></Modal>
+      />
     ),
     [createVisible]
   );
@@ -152,7 +160,7 @@ const BaseTable: React.FC = () => {
           重置
         </Button>
       </Form>
-      <Row style={{marginBottom:10}}>
+      <Row style={{ marginBottom: 10 }}>
         <Col>
           <Button
             type="primary"
