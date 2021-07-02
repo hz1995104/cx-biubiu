@@ -1,9 +1,10 @@
 import React from 'react'
 import { Modal, ModalProps, Form, Input, Select } from 'antd'
 
-//modal中form表单属性
+//modal中表单的属性
 interface FormData {
-    groupName: string
+  ppn: string
+  type:string
   }
 
 interface ModaFormProps extends ModalProps {
@@ -41,13 +42,16 @@ export const ModalForm: React.FC<ModaFormProps> = (props) => {
       wrapperCol={{ span: 18 }}
       layout="horizontal"
     >
-      <Form.Item
-        name="groupName"
-        label="ABTest组名称"
-        rules={[{ required: true, message: '请输入ABTest组名称' }]}
-      >
-        <Input placeholder={'请输入ABTest组名称'} />
-      </Form.Item>
+       <Form.Item label="属性名称" name="ppn" rules={[{ required: true, message: '请输入属性名称' }]}>
+          <Input placeholder={"请输入属性名称"} />
+        </Form.Item>
+        <Form.Item label="属性分类" name="type" rules={[{ required: true, message: '请选择属性分类' }]}>
+          <Select placeholder={"请选择属性分类"}>
+            <Select.Option value={"维修项"} key={1}>
+              {"维修项"}
+            </Select.Option>
+          </Select>
+        </Form.Item>
     </Form>
   </Modal>
   )

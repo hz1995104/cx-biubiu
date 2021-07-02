@@ -9,7 +9,7 @@ const Test: React.FC<Props> = () => {
   const history = useHistory();
 
   const Restart = () => {};
-  
+
   const Next = () => {};
 
   const Back = () => {};

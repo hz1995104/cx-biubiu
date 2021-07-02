@@ -21,35 +21,32 @@ interface Pager {
   pageIndex: number;
 }
 
-//查询所传表单属性参数
+//查询项参数
 interface SearchFormData {
-  categoryId?: number;
   ppn?: string;
-  type?: number;
+  type?: string;
 }
 
 //table数据属性
 export interface ListItem {
   key?: React.Key;
-  categoryId: number;
-  categoryName: string;
   ppn: string;
-  ppnId: number;
-  type: number;
+  type: string;
 }
 
 //modal中表单的属性
 interface FormData {
-  groupName: string;
+  ppn: string;
+  type: string;
 }
 
 const BaseTable: React.FC = () => {
   const [data, setData] = useState<ListItem[]>([]);
   const [total, setTotal] = useState(0);
   const [pager, setPager] = useState<Pager>({ pageIndex: 1, pageSize: 20 });
-  const [formData, setFormData] = useState<SearchFormData>({});
-  const [createVisible, setCreateVisible] = useState(false);
-  const [modelInitData, setModelInitData] = useState<FormData>();
+  const [formData, setFormData] = useState<SearchFormData>({}); //查询项数据
+  const [createVisible, setCreateVisible] = useState(false); //展示modal框
+  const [modelInitData, setModelInitData] = useState<FormData>(); //modal框表单初始数据
 
   const [form] = Form.useForm();
 
@@ -96,22 +93,34 @@ const BaseTable: React.FC = () => {
 
   const columns: ColumnProps<ListItem>[] = [
     {
-      title: "品类",
-      dataIndex: "categoryName",
-      align: "center",
-      width: 200,
-    },
-    {
       title: "属性名称",
       dataIndex: "ppn",
       align: "center",
-      width: 200,
     },
     {
       title: "属性分类",
       dataIndex: "type",
       align: "center",
-      width: 400,
+    },
+    {
+      title: "操作",
+      dataIndex: "operation",
+      align: "center",
+      render: (text: string, { type, ppn }: ListItem) => {
+        return (
+          <span>
+            <Button
+              type="link"
+              onClick={() => {
+                setCreateVisible(true);
+                setModelInitData({ type, ppn });
+              }}
+            >
+              编辑
+            </Button>
+          </span>
+        );
+      },
     },
   ];
 
@@ -120,10 +129,16 @@ const BaseTable: React.FC = () => {
     () => (
       <ModalForm
         title="新增"
-        onConfirm={(formData) => setCreateVisible(false)}
+        onConfirm={(formData) => {
+          setCreateVisible(false);
+          setModelInitData({ ppn: "", type: "" });
+        }}
         initData={modelInitData}
         visible={createVisible}
-        onCancel={() => setCreateVisible(false)}
+        onCancel={() => {
+          setCreateVisible(false);
+          setModelInitData({ ppn: "", type: "" });
+        }}
       />
     ),
     [createVisible]
@@ -136,13 +151,6 @@ const BaseTable: React.FC = () => {
         layout="horizontal"
         onFinish={submit}
       >
-        <Form.Item label="品类" name="categoryId">
-          <Select placeholder={"请选择品类"}>
-            <Select.Option value={"手机"} key={1}>
-              {"手机"}
-            </Select.Option>
-          </Select>
-        </Form.Item>
         <Form.Item label="属性名称" name="ppn">
           <Input placeholder={"请输入属性名称"} />
         </Form.Item>

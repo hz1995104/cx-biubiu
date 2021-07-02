@@ -6,6 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { renderRoutes, RouteConfigComponentProps } from "react-router-config";
+import { RouteConfig } from "react-router-config";
 import { Layout, Breadcrumb, BackTop } from "antd";
 import { Link } from "react-router-dom";
 import { menuData } from "@/config/menu";
@@ -27,37 +28,43 @@ const MenuLayout: React.FC<Props> = (props) => {
     location: { pathname },
   } = props;
 
-  const onCollapse = (collapsed: boolean) => {
-    setcollapsed(collapsed);
-  };
+  const onCollapse = useCallback(
+    (collapsed: boolean) => {
+      setcollapsed(collapsed);
+    },
+    [collapsed]
+  );
 
-  const getPath = useCallback(() => {
+  const getPath = () => {
     let pathSnippets: string[] = history.location.pathname
       .split("/")
       .filter((i) => i);
-    let extraBreadcrumbItems = pathSnippets.map((_: any, index: any) => {
-      const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
+    let extraBreadcrumbRouteArr: any = pathSnippets
+      .map((_: any, index: any) => {
+        const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
+        let arr = route?.routes?.filter((item) => item.path === url);
+        if (!arr?.length) {
+          return null;
+        }
+        return arr[0];
+      })
+      .filter((i) => i);
 
-      let arr = route?.routes?.filter((item) => item.path === url);
-      if (!arr?.length) {
-        return null;
-      }
-      return (
-        <Breadcrumb.Item key={url}>
-          {arr[0].navigate === false ? (
-            arr[0].name
-          ) : (
-            <Link to={url}>{arr[0].name}</Link>
-          )}
-        </Breadcrumb.Item>
-      );
-    }) as any;
+    let extraBreadcrumbItems = extraBreadcrumbRouteArr.map((v: RouteConfig) => (
+      <Breadcrumb.Item key={v.path as string}>
+        {v.navigate === false ? (
+          v.name
+        ) : (
+          <Link to={v.path as string}>{v.name}</Link>
+        )}
+      </Breadcrumb.Item>
+    ));
     setextraBreadcrumbItems(extraBreadcrumbItems);
-  }, [history.location.pathname, route]);
+  };
 
   useEffect(() => {
     getPath();
-  }, [pathname, getPath]);
+  }, [pathname]);
 
   return (
     <Fragment>

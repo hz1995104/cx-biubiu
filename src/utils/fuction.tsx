@@ -1,6 +1,10 @@
 import React, { useEffect, useRef } from "react";
 
-//获取路由参数的某一个参数值
+/**
+ * 获取路由参数的某一个参数值
+ *
+ * @param { (string) } name - 时间
+ */
 export const getQueryString = (name: string) => {
   let reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`, "i");
   let r = window.location.search.substr(1).match(reg);
@@ -25,8 +29,7 @@ export const getAllQuery = () => {
 export function getURLParameters(url: string) {
   (url.match(/([^?=&]+)(=([^&]*))/g) || []).reduce(
     (a: any, v) => (
-      (a[v.slice(0, v.indexOf("="))] = v.slice(v.indexOf("=") + 1)), a
-    ),
+      (a[v.slice(0, v.indexOf("="))] = v.slice(v.indexOf("=") + 1)), a),
     {}
   );
 }
@@ -50,37 +53,46 @@ export const getAmountThousand = (amount: string) => {
   });
 };
 
-// 根据毫秒数展示时间
-export const millisecondToTimeFormat = (
-  //@ts-ignore
-  millisecond,
-  format = "d天hh小时mm分ss秒"
+// 根据剩余毫秒数展示倒计时
+export const getRemainByMillisecond = (
+  millisecond = 0,
+  format = "d天hh:mm:ss"
 ) => {
-  if (!millisecond || !/^\d*$/.test(millisecond)) {
-    return "";
-  }
-  const value: any = { day: 0, hou: 0, min: 0, sec: 0 };
-  const map: any = { d: "day", h: "hour", m: "min", s: "sec" };
-  let day = millisecond / (60 * 60 * 24 * 1000);
-  //@ts-ignore
-  value.day = day < 1 ? 0 : parseInt(day);
-  //@ts-ignore
-  value.hour = parseInt((millisecond / (60 * 60 * 1000)) % 24);
-  //@ts-ignore
-  value.min = parseInt((millisecond / (60 * 1000)) % 60);
-  //@ts-ignore
-  value.sec = parseInt((millisecond / 1000) % 60);
+  const value = { day: 0, hou: 0, min: 0, sec: 0 };
+  const map = { d: "day", h: "hou", m: "min", s: "sec" };
 
-  if (value.day <= 0) format = "hh小时mm分ss秒";
-  //@ts-ignore
-  if (value.day <= 0 && value.hour == 0) format = "mm分ss秒";
-  //@ts-ignore
-  if (value.day <= 0 && value.hour == 0 && value.min == 0) format = "ss秒";
+  if (millisecond > 0) {
+    //@ts-ignore
+    value.day = parseInt(millisecond / (60 * 60 * 24 * 1000));
+    //@ts-ignore
+    value.hou = parseInt((millisecond / (60 * 60 * 1000)) % 24);
+    //@ts-ignore
+    value.min = parseInt((millisecond / (60 * 1000)) % 60);
+    //@ts-ignore
+    value.sec = parseInt((millisecond / 1000) % 60);
+  }
+
+  if (value.day <= 0 && format === "d天hh:mm:ss") format = "hh:mm:ss";
+
+  if (format === "d天hh小时mm分钟ss秒") {
+    if (value.day <= 0) {
+      format = "hh小时mm分钟ss秒";
+    }
+
+    if (value.day <= 0 && value.hou <= 0) {
+      format = "mm分钟ss秒";
+    }
+
+    if (value.day <= 0 && value.hou <= 0 && value.min <= 0) {
+      format = "ss秒";
+    }
+  }
 
   for (let mapKey in map) {
     let reg = new RegExp(`${mapKey}+`);
     let result = format.match(reg);
     if (result) {
+      //@ts-ignore
       let num = value[map[mapKey]];
       let length = Math.max(result[0].length, String(num).length);
       num = (Array(length).join("0") + num).slice(-length);
@@ -91,39 +103,12 @@ export const millisecondToTimeFormat = (
   return format;
 };
 
-//兼容低版本的事件
-export function triggerEvent(el: any, eventName: any) {
-  let event;
-  if (document.createEvent) {
-    event = document.createEvent("MouseEvent");
-    event.initEvent(eventName, true, true);
-    //@ts-ignore
-  } else if (document.createEventObject) {
-    // IE < 9
-    //@ts-ignore
-    event = document.createEventObject();
-    event.eventType = eventName;
-  }
-  if (el.dispatchEvent) {
-    el.dispatchEvent(event);
-    //@ts-ignore
-  } else if (el.fireEvent && window.htmlEvents[`on${eventName}`]) {
-    // IE < 9
-    el.fireEvent(`on${event.eventType}`, event); // can trigger only real event (e.g. 'click')
-  } else if (el[eventName]) {
-    el[eventName]();
-  } else if (el[`on${eventName}`]) {
-    el[`on${eventName}`]();
-  }
-}
-
 //金钱展示格式化
 export function formatMoney(value: any) {
   let money: any = "0.00";
   if (value != null) {
     money = value;
   }
-  money = new Number(money);
   if (isNaN(money)) {
     return "0.00";
   }
@@ -148,7 +133,7 @@ export function scrollToTop() {
 function isObjectValueEqual(a: any, b: any) {
   const aProps = Object.getOwnPropertyNames(a);
   const bProps = Object.getOwnPropertyNames(b);
-  if (aProps.length != bProps.length) {
+  if (aProps.length !== bProps.length) {
     return false;
   }
   for (let i = 0; i < aProps.length; i++) {
