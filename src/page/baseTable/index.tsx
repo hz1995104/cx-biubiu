@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   Button,
@@ -8,7 +8,7 @@ import {
   Form,
   Input,
   Select,
-  Modal,
+  message,
 } from "antd";
 import "./index.less";
 import { ColumnProps } from "antd/lib/table";
@@ -40,13 +40,33 @@ interface FormData {
   type: string;
 }
 
+//初始modal数据
+const modalInitData: FormData = {
+  ppn: "",
+  type: "",
+};
+
+//模拟数据
+const mockData = [
+  {
+    ppn: "cx",
+    type: "维修项",
+  },
+];
+
+const formItemLayout = {
+  labelCol: { span: 6 },
+  wrapperCol: { span: 18 }
+}
+
 const BaseTable: React.FC = () => {
-  const [data, setData] = useState<ListItem[]>([]);
+  const [data, setData] = useState<ListItem[]>(mockData);
   const [total, setTotal] = useState(0);
   const [pager, setPager] = useState<Pager>({ pageIndex: 1, pageSize: 20 });
   const [formData, setFormData] = useState<SearchFormData>({}); //查询项数据
   const [createVisible, setCreateVisible] = useState(false); //展示modal框
-  const [modelInitData, setModelInitData] = useState<FormData>(); //modal框表单初始数据
+  const [modelInitData, setModelInitData] = useState<FormData>(modalInitData); //modal框表单初始数据
+  const [flag, setFlag] = useState(""); //modal的标识，目前是新增或者编辑
 
   const [form] = Form.useForm();
 
@@ -58,7 +78,7 @@ const BaseTable: React.FC = () => {
       ...formData,
     };
     //获取搜索数据
-    // Apis.searchCategory(searchParams).then((res: any) => {
+    // Apis.searchData(searchParams).then((res: any) => {
     //   setData(res.data)
     //   setTotal(res.totalCount)
     // })
@@ -87,6 +107,23 @@ const BaseTable: React.FC = () => {
     });
   };
 
+  //新增或者修改数据处理
+  const updateOrAdd = (formData: FormData) => {
+    searchListData();
+    setCreateVisible(false);
+    setModelInitData(modalInitData);
+    // const ApiFunc = {
+    //   编辑: Apis.appMarketAdd(formData),
+    //   新增: Apis.appMarketUpdate({ ...formData, id: modelInitData?.id }),
+    // };
+    // ApiFunc[flag].then((v) => {
+    //   flag && message.success(flag === "编辑" ? "修改成功" : "新增成功");
+    //   searchListData();
+    //   setCreateVisible(false);
+    //   setModelInitData(modalInitData);
+    // });
+  };
+
   useEffect(() => {
     searchListData();
   }, [pager]);
@@ -106,14 +143,15 @@ const BaseTable: React.FC = () => {
       title: "操作",
       dataIndex: "operation",
       align: "center",
-      render: (text: string, { type, ppn }: ListItem) => {
+      render: (text: string, record: ListItem) => {
         return (
           <span>
             <Button
               type="link"
               onClick={() => {
                 setCreateVisible(true);
-                setModelInitData({ type, ppn });
+                setModelInitData(record);
+                setFlag("编辑");
               }}
             >
               编辑
@@ -124,83 +162,79 @@ const BaseTable: React.FC = () => {
     },
   ];
 
-  //存在modal
-  const addForm = useMemo(
-    () => (
+  return (
+    <>
+      <Card style={{marginBottom:20}}>
+        <Form
+          className="serchBar"
+          form={form}
+          {...formItemLayout}
+          onFinish={submit}
+        >
+          <Form.Item label="属性名称" name="ppn">
+            <Input placeholder={"请输入属性名称"} />
+          </Form.Item>
+          <Form.Item label="属性分类" name="type">
+            <Select placeholder={"请选择属性分类"}>
+              <Select.Option value={"维修项"} key={1}>
+                {"维修项"}
+              </Select.Option>
+            </Select>
+          </Form.Item>
+          <Button onClick={submit} type="primary">
+            查询
+          </Button>
+          <Button onClick={reset} type="primary">
+            重置
+          </Button>
+        </Form>
+      </Card>
+      <Card>
+        <Row style={{ marginBottom: 10 }}>
+          <Col>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => {
+                setCreateVisible(true);
+                setFlag("新增");
+              }}
+            >
+              新增
+            </Button>
+          </Col>
+        </Row>
+        <Table
+          rowKey={() => Math.random().toString()}
+          bordered
+          columns={columns}
+          dataSource={data}
+          scroll={{ x: 1000 }}
+          onChange={pageChange}
+          pagination={{
+            current: pager.pageIndex,
+            pageSize: pager.pageSize,
+            total: total,
+            showQuickJumper: true,
+            showSizeChanger: true,
+            showTotal: (total) =>
+              `共 ${total} 条记录 第 ${pager.pageIndex} / ${Math.ceil(
+                total / pager.pageSize
+              )} 页`,
+          }}
+        />
+      </Card>
       <ModalForm
-        title="新增"
-        onConfirm={(formData) => {
-          setCreateVisible(false);
-          setModelInitData({ ppn: "", type: "" });
-        }}
-        initData={modelInitData}
+        title={flag || ""}
+        onConfirm={(formData) => updateOrAdd(formData)}
         visible={createVisible}
+        initData={modelInitData}
         onCancel={() => {
           setCreateVisible(false);
-          setModelInitData({ ppn: "", type: "" });
+          setModelInitData(modalInitData);
         }}
       />
-    ),
-    [createVisible]
-  );
-  return (
-    <Card>
-      <Form
-        className="serchBar"
-        form={form}
-        layout="horizontal"
-        onFinish={submit}
-      >
-        <Form.Item label="属性名称" name="ppn">
-          <Input placeholder={"请输入属性名称"} />
-        </Form.Item>
-        <Form.Item label="属性分类" name="type">
-          <Select placeholder={"请选择属性分类"}>
-            <Select.Option value={"维修项"} key={1}>
-              {"维修项"}
-            </Select.Option>
-          </Select>
-        </Form.Item>
-        <Button onClick={submit} type="primary">
-          查询
-        </Button>
-        <Button onClick={reset} type="primary">
-          重置
-        </Button>
-      </Form>
-      <Row style={{ marginBottom: 10 }}>
-        <Col>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              setCreateVisible(true);
-            }}
-          >
-            新增
-          </Button>
-        </Col>
-      </Row>
-      {addForm}
-      <Table
-        bordered
-        columns={columns}
-        dataSource={data}
-        scroll={{ x: 800 }}
-        onChange={pageChange}
-        pagination={{
-          current: pager.pageIndex,
-          pageSize: pager.pageSize,
-          total: total,
-          showQuickJumper: true,
-          showSizeChanger: true,
-          showTotal: (total) =>
-            `共 ${total} 条记录 第 ${pager.pageIndex} / ${Math.ceil(
-              total / pager.pageSize
-            )} 页`,
-        }}
-      />
-    </Card>
+    </>
   );
 };
 
