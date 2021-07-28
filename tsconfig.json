@@ -1,22 +1,24 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "target": "es5",   // 指定 ECMAScript 目标版本: 'ES3' (default), 'ES5', 'ES6'/'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'
+    "lib": ["dom", "dom.iterable", "esnext"], //编译过程中需要引入的库文件的列表
+    "allowJs": true,  //是否允许编译js文件
+    "skipLibCheck": true, //忽略所有的声明文件（ *.d.ts）的类型检查
+    "esModuleInterop": true,      //ts导入非es模块时，用__importDefault、__importStar包裹，使其模块存在default属性
+    "experimentalDecorators": true,        // 启用装饰器
+    "emitDecoratorMetadata": true,         // 为装饰器提供元数据的支持
+    "allowSyntheticDefaultImports": true,   //允许从没有设置默认导出的模块中默认导入
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": "./",
-    "paths": {
+    "forceConsistentCasingInFileNames": true,   //禁止对同一个文件的不一致的引用
+    "noFallthroughCasesInSwitch": true,   //报告switch语句的fallthrough错误
+    "module": "esnext", // 指定生成哪个模块系统代码: 'commonjs', 'amd', 'system', 'umd' or 'es2015'
+    "moduleResolution": "node", //决定如何处理模块。或者是"Node"对于Node.js/io.js，或者是"Classic"（默认）
+    "resolveJsonModule": true,  //导入带有json扩展名的模块
+    "isolatedModules": true,   // 将每个文件作为单独的模块 （与 'ts.transpileModule' 类似）.
+    "noEmit": true,  // 不生成输出文件,即编译后不会生成任何js文件
+    "jsx": "react-jsx", // 指定 jsx 代码的生成: 'preserve', 'react-native', or 'react'
+    "baseUrl": "./",    //解析非相对模块名的基准目录
+    "paths": {    //模块名到基于 baseUrl的路径映射的列表
       "@/*": ["src/*"]
     }
   },
