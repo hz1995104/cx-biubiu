@@ -78,7 +78,7 @@ const BaseTable: React.FC = () => {
       ...formData,
     };
     //获取搜索数据
-    // Apis.searchData(searchParams).then((res: any) => {
+    // Apis.searchData(searchParams).then((res: any) => { 
     //   setData(res.data)
     //   setTotal(res.totalCount)
     // })
@@ -113,10 +113,10 @@ const BaseTable: React.FC = () => {
     setCreateVisible(false);
     setModelInitData(modalInitData);
     // const ApiFunc = {
-    //   编辑: Apis.appMarketAdd(formData),
-    //   新增: Apis.appMarketUpdate({ ...formData, id: modelInitData?.id }),
+    //   编辑: Apis.appMarketAdd
+    //   新增: Apis.appMarketUpdate
     // };
-    // ApiFunc[flag].then((v) => {
+    // ApiFunc[flag]({ ...formData, id: modelInitData?.id }).then((v) => {
     //   flag && message.success(flag === "编辑" ? "修改成功" : "新增成功");
     //   searchListData();
     //   setCreateVisible(false);
