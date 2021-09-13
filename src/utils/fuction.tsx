@@ -29,7 +29,8 @@ export const getAllQuery = () => {
 export function getURLParameters(url: string) {
   (url.match(/([^?=&]+)(=([^&]*))/g) || []).reduce(
     (a: any, v) => (
-      (a[v.slice(0, v.indexOf("="))] = v.slice(v.indexOf("=") + 1)), a),
+      (a[v.slice(0, v.indexOf("="))] = v.slice(v.indexOf("=") + 1)), a
+    ),
     {}
   );
 }
@@ -269,31 +270,24 @@ function JSONP({
   };
 }
 
-
 //将blob格式数据转换为xsl格式导出
-export function downloadFile (file:any, fileName:any) {
-	const reader = new FileReader()
-	reader.readAsText(file, 'utf-8')
-	reader.onload = () => {
-	  try {
-		if (typeof reader.result === 'string') {
-		  const match = reader.result.match(/resultMessage":"(.+?)"/)
-		  if (match) {
-			return
-		  }
-		}
-		const url = URL.createObjectURL(file)
-		const a = document.createElement('a')
-		a.target = '_blank'
-		if (fileName) {
-		  a.download = fileName
-		}
-		a.href = url
-		const event = new MouseEvent('click')
-		a.dispatchEvent(event)
-		URL.revokeObjectURL(url)
-	  } catch (err) {
-		console.error(err.message)
-	  }
-	}
-  }
+export function downloadFile(file: any, fileName: any) {
+  const reader = new FileReader();
+  reader.readAsText(file, "utf-8");
+  reader.onload = () => {
+    try {
+      const url = URL.createObjectURL(file);
+      const a = document.createElement("a");
+      a.target = "_blank";
+      if (fileName) {
+        a.download = fileName;
+      }
+      a.href = url;
+      const event = new MouseEvent("click");
+      a.dispatchEvent(event);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+}
