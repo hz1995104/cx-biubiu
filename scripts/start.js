@@ -1,52 +1,49 @@
-'use strict';
+"use strict";
 
-// Do this as the first thing so that any code reading it knows the right env.
-process.env.BABEL_ENV = 'development';
-process.env.NODE_ENV = 'development';
+//定义环境变量
+process.env.BABEL_ENV = "development";
+process.env.NODE_ENV = "development";
 
-// Makes the script crash on unhandled rejections instead of silently
-// ignoring them. In the future, promise rejections that are not handled will
-// terminate the Node.js process with a non-zero exit code.
-process.on('unhandledRejection', err => {
+process.on("unhandledRejection", (err) => {
   throw err;
 });
 
-// Ensure environment variables are read.
-require('../config/env');
+//加载本地定义的.evn文件中的环境变量
+require("../config/env");
 
-
-const fs = require('fs');
-const chalk = require('react-dev-utils/chalk');
-const webpack = require('webpack');
-const WebpackDevServer = require('webpack-dev-server');
-const clearConsole = require('react-dev-utils/clearConsole');
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
+const fs = require("fs");
+const chalk = require("react-dev-utils/chalk");
+const webpack = require("webpack");
+const WebpackDevServer = require("webpack-dev-server");
+const clearConsole = require("react-dev-utils/clearConsole");
+const checkRequiredFiles = require("react-dev-utils/checkRequiredFiles");
 const {
   choosePort,
   createCompiler,
   prepareProxy,
   prepareUrls,
-} = require('react-dev-utils/WebpackDevServerUtils');
-const openBrowser = require('react-dev-utils/openBrowser');
-const semver = require('semver');
-const paths = require('../config/paths');
-const configFactory = require('../config/webpack.config');
-const createDevServerConfig = require('../config/webpackDevServer.config');
-const getClientEnvironment = require('../config/env');
-const react = require(require.resolve('react', { paths: [paths.appPath] }));
+} = require("react-dev-utils/WebpackDevServerUtils");
+const openBrowser = require("react-dev-utils/openBrowser");
+const semver = require("semver");
+const paths = require("../config/paths");
+const configFactory = require("../config/webpack.config");
+const createDevServerConfig = require("../config/webpackDevServer.config");
+const getClientEnvironment = require("../config/env");
+const react = require(require.resolve("react", { paths: [paths.appPath] }));
 
 const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
+
+//判断是否使用yarn
 const useYarn = fs.existsSync(paths.yarnLockFile);
 const isInteractive = process.stdout.isTTY;
 
-// Warn and crash if required files are missing
+//判断appHTML和appIndexJs文件是否存在，不存在直接退出进程
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);
 }
 
-// Tools like Cloud9 rely on this.
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 8889;
-const HOST = process.env.HOST || '0.0.0.0';
+const HOST = process.env.HOST || "0.0.0.0";
 
 if (process.env.HOST) {
   console.log(
@@ -60,32 +57,30 @@ if (process.env.HOST) {
     `If this was unintentional, check that you haven't mistakenly set it in your shell.`
   );
   console.log(
-    `Learn more here: ${chalk.yellow('https://cra.link/advanced-config')}`
+    `Learn more here: ${chalk.yellow("https://cra.link/advanced-config")}`
   );
   console.log();
 }
 
-// We require that you explicitly set browsers and do not fall back to
-// browserslist defaults.
-const { checkBrowsers } = require('react-dev-utils/browsersHelper');
+//检查使用的哪个浏览器
+const { checkBrowsers } = require("react-dev-utils/browsersHelper");
 checkBrowsers(paths.appPath, isInteractive)
   .then(() => {
-    // We attempt to use the default port but if it is busy, we offer the user to
-    // run on a different port. `choosePort()` Promise resolves to the next free port.
+    //简单端口是否占用，如果占用了在当前端口号上加1，直到匹配到空闲的端口号然后使用
     return choosePort(HOST, DEFAULT_PORT);
   })
-  .then(port => {
+  .then((port) => {
     if (port == null) {
-      // We have not found a port.
       return;
     }
 
-    const config = configFactory('development');
-    const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
+    //生成webpack的开发环境配置
+    const config = configFactory("development");
+    const protocol = process.env.HTTPS === "true" ? "https" : "http";
     const appName = require(paths.appPackageJson).name;
 
     const useTypeScript = fs.existsSync(paths.appTsConfig);
-    const tscCompileOnError = process.env.TSC_COMPILE_ON_ERROR === 'true';
+    const tscCompileOnError = process.env.TSC_COMPILE_ON_ERROR === "true";
     const urls = prepareUrls(
       protocol,
       HOST,
@@ -93,12 +88,13 @@ checkBrowsers(paths.appPath, isInteractive)
       paths.publicUrlOrPath.slice(0, -1)
     );
     const devSocket = {
-      warnings: warnings =>
-        devServer.sockWrite(devServer.sockets, 'warnings', warnings),
-      errors: errors =>
-        devServer.sockWrite(devServer.sockets, 'errors', errors),
+      warnings: (warnings) =>
+        devServer.sockWrite(devServer.sockets, "warnings", warnings),
+      errors: (errors) =>
+        devServer.sockWrite(devServer.sockets, "errors", errors),
     };
-    // Create a webpack compiler that is configured with custom messages.
+
+    //创建编译器
     const compiler = createCompiler({
       appName,
       config,
@@ -109,21 +105,26 @@ checkBrowsers(paths.appPath, isInteractive)
       tscCompileOnError,
       webpack,
     });
-    // Load proxy config
+
+    //加载packjson.json中的proxy代理配置
     const proxySetting = require(paths.appPackageJson).proxy;
     const proxyConfig = prepareProxy(
       proxySetting,
       paths.appPublic,
       paths.publicUrlOrPath
     );
-    // Serve webpack assets generated by the compiler over a web server.
+
     const serverConfig = createDevServerConfig(
       proxyConfig,
       urls.lanUrlForConfig
     );
+
+    //创建devServer配置
     const devServer = new WebpackDevServer(compiler, serverConfig);
-    // Launch WebpackDevServer.
-    devServer.listen(port, HOST, err => {
+
+
+    //启动服务
+    devServer.listen(port, HOST, (err) => {
       if (err) {
         return console.log(err);
       }
@@ -131,7 +132,7 @@ checkBrowsers(paths.appPath, isInteractive)
         clearConsole();
       }
 
-      if (env.raw.FAST_REFRESH && semver.lt(react.version, '16.10.0')) {
+      if (env.raw.FAST_REFRESH && semver.lt(react.version, "16.10.0")) {
         console.log(
           chalk.yellow(
             `Fast Refresh requires React 16.10 or higher. You are using React ${react.version}.`
@@ -139,26 +140,25 @@ checkBrowsers(paths.appPath, isInteractive)
         );
       }
 
-      console.log(chalk.cyan('Starting the development server...\n'));
+      console.log(chalk.cyan("Starting the development server...\n"));
       openBrowser(urls.localUrlForBrowser);
     });
 
-    ['SIGINT', 'SIGTERM'].forEach(function (sig) {
+    ["SIGINT", "SIGTERM"].forEach(function (sig) {
       process.on(sig, function () {
         devServer.close();
         process.exit();
       });
     });
 
-    if (process.env.CI !== 'true') {
-      // Gracefully exit when stdin ends
-      process.stdin.on('end', function () {
+    if (process.env.CI !== "true") {
+      process.stdin.on("end", function () {
         devServer.close();
         process.exit();
       });
     }
   })
-  .catch(err => {
+  .catch((err) => {
     if (err && err.message) {
       console.log(err.message);
     }
