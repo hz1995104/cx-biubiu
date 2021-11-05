@@ -28,9 +28,8 @@ export const getAllQuery = () => {
 //提取当前URL参数的对象
 export function getURLParameters(url: string) {
   (url.match(/([^?=&]+)(=([^&]*))/g) || []).reduce(
-    (a: any, v) => (
-      (a[v.slice(0, v.indexOf("="))] = v.slice(v.indexOf("=") + 1)), a
-    ),
+    (a: any, v) =>
+      (a[v.slice(0, v.indexOf("="))] = v.slice(v.indexOf("=") + 1)),
     {}
   );
 }
@@ -44,7 +43,7 @@ export const getIEVersion = () => {
   return ieVersion;
 };
 
-// 转换为货币类型
+// 金钱格式化(不做小数点后的处理)
 export const getAmountThousand = (amount: string) => {
   if (!amount) {
     return "0";
@@ -54,58 +53,8 @@ export const getAmountThousand = (amount: string) => {
   });
 };
 
-// 根据剩余毫秒数展示倒计时
-export const getRemainByMillisecond = (
-  millisecond = 0,
-  format = "d天hh:mm:ss"
-) => {
-  const value = { day: 0, hou: 0, min: 0, sec: 0 };
-  const map = { d: "day", h: "hou", m: "min", s: "sec" };
-
-  if (millisecond > 0) {
-    //@ts-ignore
-    value.day = parseInt(millisecond / (60 * 60 * 24 * 1000));
-    //@ts-ignore
-    value.hou = parseInt((millisecond / (60 * 60 * 1000)) % 24);
-    //@ts-ignore
-    value.min = parseInt((millisecond / (60 * 1000)) % 60);
-    //@ts-ignore
-    value.sec = parseInt((millisecond / 1000) % 60);
-  }
-
-  if (value.day <= 0 && format === "d天hh:mm:ss") format = "hh:mm:ss";
-
-  if (format === "d天hh小时mm分钟ss秒") {
-    if (value.day <= 0) {
-      format = "hh小时mm分钟ss秒";
-    }
-
-    if (value.day <= 0 && value.hou <= 0) {
-      format = "mm分钟ss秒";
-    }
-
-    if (value.day <= 0 && value.hou <= 0 && value.min <= 0) {
-      format = "ss秒";
-    }
-  }
-
-  for (let mapKey in map) {
-    let reg = new RegExp(`${mapKey}+`);
-    let result = format.match(reg);
-    if (result) {
-      //@ts-ignore
-      let num = value[map[mapKey]];
-      let length = Math.max(result[0].length, String(num).length);
-      num = (Array(length).join("0") + num).slice(-length);
-      format = format.replace(reg, num);
-    }
-  }
-
-  return format;
-};
-
-//金钱展示格式化
-export function formatMoney(value: any) {
+//金钱展示格式化(始终保持两位小数点，不够补位0)
+export function formatMoney(value: number) {
   let money: any = "0.00";
   if (value != null) {
     money = value;
@@ -120,6 +69,49 @@ export function formatMoney(value: any) {
   }
   return money;
 }
+
+// 格式化剩余时间
+export const formatRemainTime = (
+  //@ts-ignore
+  remainTime,
+  format = "d天hh小时mm分钟ss秒"
+) => {
+  const value = { day: 0, hou: 0, min: 0, sec: 0 };
+  const map = { d: "day", h: "hou", m: "min", s: "sec" };
+
+  if (remainTime > 0) {
+    //@ts-ignore
+    value.day = parseInt(remainTime / (60 * 60 * 24));
+    //@ts-ignore
+    value.hou = parseInt((remainTime / (60 * 60)) % 24);
+    //@ts-ignore
+    value.min = parseInt((remainTime / 60) % 60);
+    //@ts-ignore
+    value.sec = parseInt(remainTime % 60);
+  }
+  if (value.day <= 0) {
+    format = format.slice(2);
+    if (value.hou <= 0) {
+      format = format.slice(4);
+      if (value.min <= 0) {
+        format = format.slice(4);
+      }
+    }
+  }
+
+  for (let mapKey in map) {
+    let reg = new RegExp(`${mapKey}+`);
+    let result = format.match(reg);
+    if (result) {
+      //@ts-ignore
+      let num = value[map[mapKey]];
+      let length = Math.max(result[0].length, String(num).length);
+      num = (Array(length).join("0") + num).slice(-length);
+      format = format.replace(reg, num);
+    }
+  }
+  return format;
+};
 
 //平滑滚动到顶部
 export function scrollToTop() {
