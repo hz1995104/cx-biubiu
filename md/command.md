@@ -77,24 +77,42 @@
 - npm update                        更新项目的包到期望版本
 - npm config get registry 	        查看当前镜像源
 - npm config list				    当前npm配置
+- npm config ls -l                  当前npm的所有配置，包括默认配置
+- npm config set <key> <value>      修改某个配置
 - npm version patch	                升级补丁版本号
 - npm version minor	                升级小版本号  
 - npm version major	                升级大版本号
 - npm login	                        登陆
 - npm publish	                    发布
+- npm unpubilsh packageName@x.x.x   撤回某个发布版本
 - npm list                          查看当前项目所有包的树形依赖关系
 - npm list | grep package           查看某一个包的树形依赖关系
 - npm i -production                 只装生产环境下的包
 - npm cache clean -force            清除项目包缓存
 - npm config get registry           当前npm源
 - npm config set registry + adr     切换npm源  
+- npm root                          当前包下载路径
 - npm root -g                       全局包下载的路径
+- npm adduser                       注册npm账户
+- npm owner ls package              获取包拥有者的
+- npm doctor                        在当前环境中进行多项检查，比如node和npm版本，缓存文件权限等
+- npm home <package>                打开模块主页
+- npm repo <package>                打开模块的代码仓库
+- npm docs <package>                打开模块的文档地址
+- npm bugs <package>                打开模块的issues地址
+- npm link                          软链接到全局
+- npm unlink                        解除软连接
+
+
+
+
 
 
 ***
 
 # *Git*
 - git log                                        提交日志
+- glog                                           提交日志树状展示
 - git status                                     本地修改文件状态
 - git checkout test                              切换分支
 - git push  -set -upstream origin  test	         将本地分支提交到远端（远端不存在时会创建）
@@ -106,3 +124,10 @@
 - git push origin  test:master	                 将本地分支test提交到远程分支master
 - git checkout  -b test origin/test	             根据远程分支tset创建本地分支test
 - git checkout  -src/index.js		             还原文件的修改
+- git reflog                                     查看所有分支操作，包括已删除记录和reset记录
+- git rebase -i commit id                        需要变基的提交记录范围（后者是起始id）
+- git rebase master                              变基后将本地master最新的分支同步到本地（开发时需要先将本地master拉取到最新，不推荐）
+- git rebase origin/master                       变基后将远端master最新的分支同步到本地（开发推荐，不需要本地master拉取最新分支）
+- git rebase --continue                          继续变基操作
+- git rebase --abort                             中止当前变基操作
+- git commit --amend                             修改最后一次提交的注释
