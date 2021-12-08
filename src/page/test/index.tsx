@@ -1,6 +1,6 @@
 import * as React from "react";
 import "@/page/test/index.less";
-import { Button, Pagination, Steps, Checkbox, DatePicker } from "antd";
+import { Button, Descriptions, Statistic } from "antd";
 import { useHistory } from "react-router-dom";
 
 export interface Props {}
@@ -8,23 +8,7 @@ export interface Props {}
 const Test: React.FC<Props> = () => {
   const history = useHistory();
 
-  const Restart = () => {
-    var name = "a";
-
-    const sayHi = () => {
-      const name = 'b'
-  
-      //@ts-ignore
-      console.log("Hello,", this.name);
-    };
-    
-    const person = {
-      name: "YvetteLau",
-      sayHi: sayHi,
-    };
-    
-    person.sayHi();
-  };
+  const Restart = () => {};
 
   const Next = () => {};
 
@@ -52,7 +36,7 @@ const Test: React.FC<Props> = () => {
           {"NEXT"}
         </Button>
       </div>
-      <DatePicker renderExtraFooter={() => <div>1</div>} mode={"date"} />
+      <Statistic value={22222.878732} precision={2} />
     </div>
   );
 };
