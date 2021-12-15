@@ -73,18 +73,20 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "scripts": {
+    "preinstall": "npx only-allow yarn",
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "clean": "rm -rf ./node_modules/.cache"
+    "lint": "eslint 'src/**/*.{js,jsx,tsx}'",
+    "clean": "rm -rf ./node_modules/.cache",
+    "prepare": "husky install"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
+  "lint-staged": {
+    "**/*": [
+      "prettier --write --ignore-unknown"
     ],
-    "rules": {
-      "no-unused-vars": "off"
-    }
+    "src/**/*.{js,jsx,tsx}": [
+      "eslint --max-warnings 0"
+    ]
   },
   "browserslist": {
     "production": [
@@ -107,6 +109,9 @@
     "@types/antd": "^1.0.0",
     "@types/react-router-config": "^5.0.2",
     "@types/react-router-dom": "^5.1.7",
-    "babel-plugin-import": "^1.13.3"
+    "babel-plugin-import": "^1.13.3",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.1.2",
+    "prettier": "^2.5.0"
   }
 }
