@@ -8,7 +8,10 @@ interface User {
   authority?: Record<string, boolean>
 }
 
-export const UserContext = createContext<{ user: User; setUser: Dispatch<SetStateAction<{}>> }>({
+export const UserContext = createContext<{
+  user: User
+  setUser: Dispatch<SetStateAction<{}>>
+}>({
   user: {},
-  setUser: () => {},
+  setUser: () => {}
 })

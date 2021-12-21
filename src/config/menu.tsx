@@ -1,49 +1,46 @@
-import {
-  SoundOutlined,
-  ReadOutlined,
-  HeatMapOutlined,
-} from "@ant-design/icons";
+/* eslint-disable */
+import { SoundOutlined, ReadOutlined, HeatMapOutlined } from '@ant-design/icons'
 
 export const menuData = [
   {
-    name: "书籍",
-    path: "/menu/book",
+    name: '书籍',
+    path: '/menu/book',
     icon: ReadOutlined,
     children: [
       {
-        name: "活着",
-        path: "/menu/book/live",
+        name: '活着',
+        path: '/menu/book/live'
       },
       {
-        name: "围城",
-        path: "/menu/book/town",
-      },
-    ],
+        name: '围城',
+        path: '/menu/book/town'
+      }
+    ]
   },
   {
-    name: "音乐",
-    path: "/menu/music",
+    name: '音乐',
+    path: '/menu/music',
     icon: SoundOutlined,
     children: [
       {
-        name: "意外",
-        path: "/menu/music/accident",
+        name: '意外',
+        path: '/menu/music/accident'
       },
       {
-        name: "爱的诗",
-        path: "/menu/music/lovepome",
-      },
-    ],
+        name: '爱的诗',
+        path: '/menu/music/lovepome'
+      }
+    ]
   },
   {
-    name: "模版",
-    path: "/menu/template",
+    name: '模版',
+    path: '/menu/template',
     icon: HeatMapOutlined,
     children: [
       {
-        name: "基础表格",
-        path: "/menu/template/baseTable",
-      },
-    ],
-  },
-];
+        name: '基础表格',
+        path: '/menu/template/baseTable'
+      }
+    ]
+  }
+]

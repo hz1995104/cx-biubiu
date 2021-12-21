@@ -1,6 +1,6 @@
-import * as React from 'react'
+import React from 'react'
 import '@/page/test/index.less'
-import { Button, Statistic } from 'antd'
+import { Button } from 'antd'
 import { useHistory } from 'react-router-dom'
 
 export interface Props {}
@@ -36,7 +36,6 @@ const Test: React.FC<Props> = () => {
           {'NEXT'}
         </Button>
       </div>
-      <Statistic value={22222.878732} precision={2} />
     </div>
   )
 }
