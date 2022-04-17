@@ -2,6 +2,7 @@ import React from 'react'
 import '@/page/test/index.less'
 import { Button } from 'antd'
 import { useHistory } from 'react-router-dom'
+import Children from './components/children'
 
 export interface Props {}
 
@@ -36,6 +37,7 @@ const Test: React.FC<Props> = () => {
           {'NEXT'}
         </Button>
       </div>
+      <Children age={25} />
     </div>
   )
 }

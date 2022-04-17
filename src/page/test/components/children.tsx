@@ -1,6 +1,9 @@
 import * as React from 'react'
+import { Button } from 'antd'
 
-interface ChildrenProps {}
+interface ChildrenProps {
+  age: number
+}
 
 interface ChildrenState {
   name: string
@@ -15,13 +18,20 @@ class Children extends React.Component<ChildrenProps, ChildrenState> {
   }
 
   handleOnclick = () => {
-    setTimeout(() => {
-      this.setState({ name: 'msm' })
-    }, 1000)
+    this.setState({ name: 'msm' })
   }
 
   render() {
-    return <button onClick={this.handleOnclick}>点击</button>
+    console.log('render', this.props.age)
+    return (
+      <Button
+        style={{ float: 'right', marginRight: 30, width: 150 }}
+        type="primary"
+        onClick={this.handleOnclick}
+      >
+        点击
+      </Button>
+    )
   }
 }
 
